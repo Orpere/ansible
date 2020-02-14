@@ -1,2 +1,37 @@
 ---
 # tasks file for sambaS3
+- name: install the latest version of s3fs samba restic
+  package:
+    name:
+      - python-apt
+      - s3fs
+      - samba
+      - ufw
+      - restic
+    state: latest
+
+- name: Ensure group "security" exists
+  group:
+    name: security
+    state: present
+
+- name: Add the user 'test' with a specific uid and a primary group of 'security'
+  user:
+    name: test
+    comment: samba user
+    group: security
+
+- name: Make sure samba is running
+  systemd:
+    state: started
+    name: smbd
+
+- name: add a samba password to the user test
+  shell: (echo 'test123'; echo 'test123') | smbpasswd -a test
+  args:
+    executable: /bin/bash
+
+# TODO - name: create the share
+# TODO - name: add ufw rules
+# TODO create variables for all role
+# TODO - name: mount the hare on s3
