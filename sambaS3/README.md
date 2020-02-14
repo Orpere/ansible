@@ -34,7 +34,7 @@ passed in as parameters) is always nice for users too:
 
     - hosts: servers
       roles:
-         - { role: bareos-client, x: 42 }
+         - { role: sambaS3, x: 42 }
 
 License
 -------
