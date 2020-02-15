@@ -30,7 +30,7 @@
   # command: sed -i 's|# user_allow_other|user_allow_other|' /etc/fuse.conf
 
 # TODO - name: mount the s3 bucket
-#   command: /usr/bin/s3fs "{{BUCKET}}" "{{STORAGE}}" -o passwd_file=/etc/passwd-s3fs -o uid=$(id -u "{{samba_user}}"),gid=$(id -g "{{samba_user}}"),allow_other,mp_umask=002 -o url="{{S3URL}}"
+#   command: /usr/bin/s3fs "{{BUCKET}}" "{{STORAGE}}" -o passwd_file=/etc/passwd-s3fs -o uid=$(id -u "{{samba_user}}"),gid=$(id -g "{{samba_user}}"),allow_other,mp_umask=002 -o url="https://s3-"{{REGION}}".amazonaws.com"
 
 - name: Ensure fstab uses "s3fs#"{{BUCKET}}"
   mount:
