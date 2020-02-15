@@ -1,10 +1,9 @@
 ---
 # tasks file for sambaS3
-- name: install the latest version of s3fs samba restic
+- name: install the latest version of samba
   package:
     name:
       - python-apt
-      - s3fs
       - samba
       - ufw
       - openssh-server
@@ -62,3 +61,5 @@
   template:
     src: smb.j2
     dest: /etc/samba/smb.conf
+
+- include: s3.yml

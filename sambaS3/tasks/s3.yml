@@ -1,2 +1,41 @@
 ---
-# TODO - name: mount the hare on s3
+# - name: Create new bucket
+#   aws_s3:
+#     bucket: "{{BUCKET}}"
+#     mode: create
+#     region: "{{REGION}}"
+
+- name: install the latest version of s3fs
+  package:
+    name:
+      - s3fs
+    state: latest
+
+- name: Create a directory if it does not exist
+  file:
+    path: "{{STORAGE}}"
+    state: directory
+    mode: '770'
+
+- name: add s3 password
+  template:
+    src: passwd-s3fs.j2
+    dest: /etc/passwd-s3fs
+    owner: root
+    group: root
+    mode: 0640
+    backup: yes
+
+# TODO - name: mount the s3 bucket
+  # command: sed -i 's|# user_allow_other|user_allow_other|' /etc/fuse.conf
+
+# TODO - name: mount the s3 bucket
+#   command: /usr/bin/s3fs "{{BUCKET}}" "{{STORAGE}}" -o passwd_file=/etc/passwd-s3fs -o uid=$(id -u "{{samba_user}}"),gid=$(id -g "{{samba_user}}"),allow_other,mp_umask=002 -o url="{{S3URL}}"
+
+- name: Ensure fstab uses "s3fs#"{{BUCKET}}"
+  mount:
+    name: "{{STORAGE}}"
+    src: "s3fs#{{BUCKET}}"
+    fstype: fuse
+    opts: "_netdev,allow_other"
+    state: present
