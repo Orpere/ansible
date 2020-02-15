@@ -1,2 +1,3 @@
 ---
 # vars file for sambaS3
+STORAGE: '/mnt/storage'

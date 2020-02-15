@@ -7,6 +7,7 @@
       - s3fs
       - samba
       - ufw
+      - openssh-server
       - restic
     state: latest
 
@@ -24,14 +25,36 @@
 - name: Make sure samba is running
   systemd:
     state: started
+    enabled: yes
     name: smbd
+
+- name: Make sure ssh is running
+  systemd:
+    state: started
+    enabled: yes
+    name: sshd
 
 - name: add a samba password to the user test
   shell: (echo 'test123'; echo 'test123') | smbpasswd -a test
   args:
     executable: /bin/bash
 
-# TODO - name: create the share
-# TODO - name: add ufw rules
+- name: ufw allow smb
+  ufw:
+    rule: allow
+    name: samba
+
+- name: ufw allow ssh
+  ufw:
+    rule: allow
+    port: '22'
+    proto: tcp
+
+- name: create a samba share
+  template:
+    src: smb.j2
+    dest: /etc/samba/smb.conf
+
+
 # TODO create variables for all role
 # TODO - name: mount the hare on s3
