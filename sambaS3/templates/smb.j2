@@ -63,12 +63,12 @@
    read only = yes
    guest ok = no
 ;   write list = root, @lpadmin
-[Security]
+[{{samba_group}}]
     path = {{STORAGE}}
     writable = yes
     create mode = 0770
     directory mode = 0770
     # guest not allowed
     guest ok = no
-    # allow users only in [security] group
-    valid users = @security
+    # allow users only in [{{samba_group}}] group
+    valid users = @{{samba_group}}

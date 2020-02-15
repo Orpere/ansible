@@ -11,16 +11,16 @@
       - restic
     state: latest
 
-- name: Ensure group "security" exists
+- name: Ensure group "{{samba_group}}" exists
   group:
-    name: security
+    name: "{{samba_group}}"
     state: present
 
-- name: Add the user 'test' with a specific uid and a primary group of 'security'
+- name: Add the user "{{samba_user}}" with a specific uid and a primary group of "{{samba_group}}"
   user:
-    name: test
+    name: "{{samba_user}}"
     comment: samba user
-    group: security
+    group: "{{samba_group}}"
 
 - name: Make sure samba is running
   systemd:
@@ -35,7 +35,7 @@
     name: sshd
 
 - name: add a samba password to the user test
-  shell: (echo 'test123'; echo 'test123') | smbpasswd -a test
+  shell: (echo "{{samba_password}}"; echo "{{samba_password}}") | smbpasswd -a "{{samba_user}}"
   args:
     executable: /bin/bash
 
@@ -50,11 +50,15 @@
     port: '22'
     proto: tcp
 
+- name: Recursively change ownership of "{{STORAGE}}"
+  file:
+    path: "{{STORAGE}}"
+    state: directory
+    recurse: yes
+    owner: '{{samba_user}}'
+    group: '{{samba_group}}'
+
 - name: create a samba share
   template:
     src: smb.j2
     dest: /etc/samba/smb.conf
-
-
-# TODO create variables for all role
-# TODO - name: mount the hare on s3
