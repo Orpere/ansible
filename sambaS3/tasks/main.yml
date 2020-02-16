@@ -4,6 +4,7 @@
   package:
     name:
       - python-apt
+      - python3-apt
       - samba
       - ufw
       - openssh-server
