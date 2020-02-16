@@ -29,7 +29,8 @@
          -o uid=$(id -u '{{ samba_user }}'),gid=$(id -g '{{ samba_user }}'),allow_other,mp_umask=002 \
          -o url="https://s3-'{{ REGION }}'.amazonaws.com"
   args:
-    executable: /bin/bash
+    executable: /usr/bin/s3fs
+  changed_when: false
   delegate_to: localhost
 - name: Ensure fstab uses "s3fs#"{{ BUCKET }}"
   mount:
