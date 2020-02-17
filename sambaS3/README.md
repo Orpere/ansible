@@ -1,5 +1,6 @@
 Role Name
 =========
+
 This role has the main target the installation of samba share to connect a s3 bucket s drive.
 
 Requirements
@@ -11,13 +12,13 @@ Requirements
 Role Variables
 --------------
 
-STORAGE: '/mnt/storage'
-samba_group: 'security'
-samba_user: 'test'
-samba_password: 'xxxxxxxxxx' # this is just a test password
-BUCKET: "test-backup-orp01"
-REGION: "eu-central-1"
-S3URL: 'https://s3-eu-central-1.amazonaws.com'
+STORAGE: '/mnt/storage' \
+samba_group: 'security'\
+samba_user: 'test'\
+samba_password: 'xxxxxxxxxx' # this is just a test password\
+BUCKET: "test-backup-orp01"\
+REGION: "eu-central-1"\
+S3URL: [https://s3-eu-central-1.amazonaws.com](https://aws.amazon.com/s3/)
 
 Dependencies
 ------------
