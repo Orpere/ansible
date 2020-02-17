@@ -13,23 +13,21 @@ good idea to mention in this section that the boto package is required.
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including
-any variables that are in defaults/main.yml, vars/main.yml, and any variables
-that can/should be set via parameters to the role. Any variables that are read
-from other roles and/or the global scope (ie. hostvars, group vars, etc.) should
-be mentioned here as well.
+STORAGE: '/mnt/storage'
+samba_group: 'security'
+samba_user: 'test'
+samba_password: '4zUVkmXnHfZ6xmvU2aQDcn' # this is just a test password
+BUCKET: "test-backup-orp01"
+REGION: "eu-central-1"
+S3URL: 'https://s3-eu-central-1.amazonaws.com'
 
 Dependencies
 ------------
-
+aws credentials with s3 access
 ```bash
 export s3_access_key="xxxxx"
 export s3_secret_key="xxxxx"
 ```
-
-A list of other roles hosted on Galaxy should go here, plus any details in
-regards to parameters that may need to be set for other roles, or variables that
-are used from other roles.
 
 Example Playbook
 ----------------
@@ -51,5 +49,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a
-website (HTML is not allowed).
+[Orlando Rosa Pereira](https://github.com/Orpere)

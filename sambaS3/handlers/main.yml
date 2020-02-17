@@ -1,2 +1,4 @@
 ---
 # handlers file for sambaS3
+- name: smbd restart
+  service: name=smbd state=restarted

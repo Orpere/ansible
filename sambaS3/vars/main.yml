@@ -7,3 +7,4 @@ samba_password: '4zUVkmXnHfZ6xmvU2aQDcn' # this is just a test password
 #s3 variables
 BUCKET: "test-backup-orp01"
 REGION: "eu-central-1"
+S3URL: "https://s3-eu-central-1.amazonaws.com"

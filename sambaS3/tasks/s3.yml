@@ -2,6 +2,18 @@
 - name: install the latest version of s3fs
   package:
     name:
+      - automake
+      - autotools-dev
+      - libgcrypt20-dev
+      - fuse
+      - g++
+      - git
+      - libcurl4-openssl-dev
+      - libfuse-dev
+      - libssl-dev
+      - libxml2-dev
+      - make
+      - pkg-config
       - s3fs
     state: present
 - name: Create a directory if it does not exist
@@ -15,19 +27,19 @@
     dest: /etc/passwd-s3fs
     owner: root
     group: root
-    mode: 0640
+    mode: '0640'
     backup: yes
 - name: add s3 password to fuse
   template:
     src: fuse.j2
     dest: /etc/fuse.conf
-    mode: 0755
+    mode: '444'
 - name: mount the s3 bucket
   shell: |
          s3fs "{{ BUCKET }}" "{{ STORAGE }}" \
          -o passwd_file=/etc/passwd-s3fs \
-         -o uid=$(id -u '{{ samba_user }}'),gid=$(id -g '{{ samba_user }}'),allow_other,mp_umask=002 \
-         -o url="https://s3-'{{ REGION }}'.amazonaws.com"
+         -o uid=$(id -u "{{ samba_user }}"),gid=$(id -g "{{ samba_user }}"),allow_other,mp_umask=002 \
+         -o url="{{ S3URL }}" -o endpoint="{{ REGION }}"
   changed_when: false
 - name: Ensure fstab uses "s3fs#"{{ BUCKET }}"
   mount:
@@ -36,3 +48,4 @@
     fstype: fuse
     opts: "_netdev,allow_other"
     state: present
+  notify: smbd restart
