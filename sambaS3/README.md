@@ -1,14 +1,12 @@
 Role Name
 =========
-
-A brief description of the role goes here.
+This role has the main target the installation of samba share to connect a s3 bucket s drive.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should
-be mentioned here. For instance, if the role uses the EC2 module, it may be a
-good idea to mention in this section that the boto package is required.
+- Ubuntu instance
+- A aws account with s3 access and one s3 bucket
 
 Role Variables
 --------------
@@ -16,14 +14,16 @@ Role Variables
 STORAGE: '/mnt/storage'
 samba_group: 'security'
 samba_user: 'test'
-samba_password: '4zUVkmXnHfZ6xmvU2aQDcn' # this is just a test password
+samba_password: 'xxxxxxxxxx' # this is just a test password
 BUCKET: "test-backup-orp01"
 REGION: "eu-central-1"
 S3URL: 'https://s3-eu-central-1.amazonaws.com'
 
 Dependencies
 ------------
+
 aws credentials with s3 access
+
 ```bash
 export s3_access_key="xxxxx"
 export s3_secret_key="xxxxx"

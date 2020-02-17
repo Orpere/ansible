@@ -3,7 +3,7 @@
 STORAGE: '/mnt/storage'
 samba_group: 'security'
 samba_user: 'test'
-samba_password: '4zUVkmXnHfZ6xmvU2aQDcn' # this is just a test password
+samba_password: 'xxxxxxxxxxxx' # this is just a test password
 #s3 variables
 BUCKET: "test-backup-orp01"
 REGION: "eu-central-1"

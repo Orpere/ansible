@@ -1,6 +1,5 @@
 # Roles Infrastructure Clovrlabs
 
-we use molecule to develop and test our roles please check my setup if you are interested in have the same on [repository](https://github.com/Orpere/molecule-setup) 
+we use molecule to develop and test our roles please check my setup if you are interested in have the same on [repository](https://github.com/Orpere/molecule-setup)
 
-- [ ] SAMBAs3 (samba server)
-
+- [x] SAMBAs3 (samba server).
