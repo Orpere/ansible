@@ -1,2 +1,64 @@
 ---
 # tasks file for wireguard
+- name: install dependencies
+  package:
+    name:
+      - python-apt
+      - python3-apt
+      - software-properties-common
+      - ufw
+      - iproute2
+      - net-tools
+      - openssh-server
+      - restic
+    state: present
+- name: Add wireguard repository from PPA and install its signing key.
+  apt_repository:
+    repo: ppa:wireguard/wireguard
+    update_cache: yes
+    validate_certs: yes
+- name: install wireguard components
+  package:
+    name:
+      - wireguard-dkms
+      - wireguard-tools
+    #TODO- "linux-headers-{{ ansible_kernel }}" enable on the end
+    state: present
+- name: generate server private and public key
+  shell: |
+    set -o pipefail
+    umask 077
+    wg genkey | tee server_private_key | wg pubkey > server_public_key
+  args:
+    executable: /bin/bash
+  changed_when: false
+- name: set the ipv4 forward
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes
+
+- name: get the PrivateKey
+  shell: "cat server_private_key"
+  register: PrivateKey
+- set_fact: PrivateKey="{{ PrivateKey.stdout }}"
+- debug: var=PrivateKey
+- name: get the PublicKey
+  shell: "cat server_public_key"
+  register: PublicKey
+- set_fact: PublicKey="{{ PublicKey.stdout }}"
+- debug: var=PublicKey
+- name: create a wg0 server config
+  template:
+    src: wg0_server.j2
+    dest: /etc/wireguard/wg0.conf
+- name: Change file ownership, group and permissions
+  file:
+    path: /etc/wireguard/wg0.conf
+    owner: root
+    group: root
+    mode: '600'
+- name: activate wg0
+  command: wg-quick up wg0
+- name: Make sure wg service is running
+  command: systemctl enable wg-quick@wg0.service
