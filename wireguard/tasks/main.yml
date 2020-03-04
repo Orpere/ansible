@@ -10,7 +10,6 @@
       - iproute2
       - net-tools
       - openssh-server
-      - restic
     state: present
 - name: Add wireguard repository from PPA and install its signing key.
   apt_repository:
@@ -37,18 +36,17 @@
     name: net.ipv4.ip_forward
     value: '1'
     sysctl_set: yes
-
-- name: get the PrivateKey
+- name: Get the PrivateKey
   shell: "cat server_private_key"
   register: PrivateKey
 - set_fact: PrivateKey="{{ PrivateKey.stdout }}"
 - debug: var=PrivateKey
-- name: get the PublicKey
+- name: Get the PublicKey
   shell: "cat server_public_key"
   register: PublicKey
 - set_fact: PublicKey="{{ PublicKey.stdout }}"
 - debug: var=PublicKey
-- name: create a wg0 server config
+- name: Create a wg0 server config
   template:
     src: wg0_server.j2
     dest: /etc/wireguard/wg0.conf
@@ -58,7 +56,7 @@
     owner: root
     group: root
     mode: '600'
-- name: activate wg0
+- name: Activate wg0
   command: wg-quick up wg0
 - name: Make sure wg service is running
   command: systemctl enable wg-quick@wg0.service
