@@ -21,8 +21,7 @@
     name:
       - wireguard-dkms
       - wireguard-tools
-    #TODO- "linux-headers-{{ ansible_kernel }}" enable on the end
-    state: present
+      - "linux-headers-{{ ansible_kernel }}"
 - name: generate server private and public key
   shell: |
     set -o pipefail
