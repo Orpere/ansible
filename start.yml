@@ -3,4 +3,5 @@
   remote_user: ubuntu
   become: true
   roles:
-   - { role: sambaS3 }
+  #  - { role: sambaS3 }
+   - { role: wireguard }
