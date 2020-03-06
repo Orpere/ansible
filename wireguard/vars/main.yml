@@ -1,4 +1,4 @@
 ---
 # vars file for wireguard
 interfaceaddress: '10.0.1.5/24'
-allowedips_server: '159.69.185.181/32'
+allowedips_server: '0.0.0.0/0'

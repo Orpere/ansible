@@ -1,9 +1,11 @@
 ---
 # tasks file for wireguard
-- name: Upgrade all apt packages
-  apt: 
+- name: Update all packages to the latest version
+  apt:
     upgrade: dist
-    force_apt_get: yes
+- name: apt-get update as a separate step
+  apt:
+    update_cache: yes
 - name: install dependencies
   package:
     name:
@@ -20,6 +22,9 @@
     repo: ppa:wireguard/wireguard
     update_cache: yes
     validate_certs: yes
+- name: apt-get update wireguard
+  apt:
+   update_cache: yes
 - name: install wireguard components
   package:
     name:
@@ -34,6 +39,14 @@
   args:
     executable: /bin/bash
   changed_when: false
+- name: generate server private and public key
+  shell: |
+    set -o pipefail
+    umask 077
+    wg genkey | tee client_private_key | wg pubkey > client_public_key
+  args:
+    executable: /bin/bash
+  changed_when: false
 - name: set the ipv4 forward
   sysctl:
     name: net.ipv4.ip_forward
@@ -42,13 +55,13 @@
 - name: Get the PrivateKey
   shell: "cat server_private_key"
   register: PrivateKey
-- set_fact: PrivateKey="{{ PrivateKey.stdout }}"
-- debug: var=PrivateKey
-- name: Get the PublicKey
-  shell: "cat server_public_key"
-  register: PublicKey
-- set_fact: PublicKey="{{ PublicKey.stdout }}"
-- debug: var=PublicKey
+# - set_fact: PrivateKey="{{ PrivateKey.stdout }}"
+# - debug: var=PrivateKey
+- name: Get the client PublicKey
+  shell: "cat client_public_key"
+  register: CPublicKey
+# - set_fact: PublicKey="{{ PublicKey.stdout }}"
+# - debug: var=PublicKey
 - name: Create a wg0 server config
   template:
     src: wg0_server.j2
