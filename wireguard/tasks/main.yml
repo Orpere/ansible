@@ -1,8 +1,5 @@
 ---
 # tasks file for wireguard
-- name: Update all packages to the latest version
-  apt:
-    upgrade: dist
 - name: apt-get update as a separate step
   apt:
     update_cache: yes
@@ -12,7 +9,6 @@
       - python-apt
       - python3-apt
       - software-properties-common
-      - ufw
       - iproute2
       - net-tools
       - openssh-server
@@ -28,9 +24,13 @@
 - name: install wireguard components
   package:
     name:
+      - libmnl-dev
+      - libelf-dev
       - wireguard-dkms
       - wireguard-tools
       - "linux-headers-{{ ansible_kernel }}"
+      - build-essential
+      - pkg-config
 - name: generate server private and public key
   shell: |
     set -o pipefail
@@ -39,7 +39,7 @@
   args:
     executable: /bin/bash
   changed_when: false
-- name: generate server private and public key
+- name: generate client private and public key
   shell: |
     set -o pipefail
     umask 077
@@ -52,16 +52,35 @@
     name: net.ipv4.ip_forward
     value: '1'
     sysctl_set: yes
+    state: present
+    reload: yes
+- name: set arp forward
+  sysctl:
+    name: net.ipv4.conf.all.proxy_arp
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
 - name: Get the PrivateKey
   shell: "cat server_private_key"
   register: PrivateKey
-# - set_fact: PrivateKey="{{ PrivateKey.stdout }}"
-# - debug: var=PrivateKey
-- name: Get the client PublicKey
+- set_fact: PrivateKey="{{ PrivateKey.stdout }}"
+- debug: var=PrivateKey
+- name: Get the server PublicKey
+  shell: "cat server_public_key"
+  register: PublicKey
+- set_fact: PublicKey="{{ PublicKey.stdout }}"
+- debug: var=PublicKey
+- name: Get the client CPrivateKey
+  shell: "cat client_private_key"
+  register: CPrivateKey
+- set_fact: CPrivateKey="{{ CPrivateKey.stdout }}"
+- debug: var=CPrivateKey
+- name: Get the client CPublicKey
   shell: "cat client_public_key"
   register: CPublicKey
-# - set_fact: PublicKey="{{ PublicKey.stdout }}"
-# - debug: var=PublicKey
+- set_fact: CPublicKey="{{ CPublicKey.stdout }}"
+- debug: var=CPublicKey
 - name: Create a wg0 server config
   template:
     src: wg0_server.j2
@@ -76,3 +95,6 @@
   command: wg-quick up wg0
 - name: Make sure wg service is running
   command: systemctl enable wg-quick@wg0.service
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
