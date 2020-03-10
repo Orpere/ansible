@@ -5,7 +5,8 @@ ListenPort = 8999
 PrivateKey = {{PrivateKey}}
 PostUp = iptables -I FORWARD -i %i -j ACCEPT; iptables -I FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+
 [Peer]
 PublicKey = {{CPublicKey}}
-AllowedIPs = 192.168.66.0/24
+AllowedIPs = 10.0.1.0/24
 PersistentKeepalive = 25

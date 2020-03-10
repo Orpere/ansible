@@ -21,6 +21,9 @@
 - name: apt-get update wireguard
   apt:
    update_cache: yes
+- name: kernelversion
+  shell: uname -r
+  register: kernelversion
 - name: install wireguard components
   package:
     name:
@@ -28,7 +31,7 @@
       - libelf-dev
       - wireguard-dkms
       - wireguard-tools
-      - "linux-headers-{{ ansible_kernel }}"
+      - "linux-headers-{{ kernelversion.stdout }}"
       - build-essential
       - pkg-config
 - name: generate server private and public key
@@ -98,3 +101,9 @@
 - name: Update all packages to the latest version
   apt:
     upgrade: dist
+- name: install wireguard components
+  package:
+    name:
+        - "linux-headers-{{ kernelversion.stdout }}"
+        - build-essential
+        - pkg-config
