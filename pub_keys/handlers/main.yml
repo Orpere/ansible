@@ -1,0 +1,6 @@
+---
+# handlers file for pub_keys
+- name: RELOAD SSHD
+  service:
+    name: "ssh"
+    state: "restarted"

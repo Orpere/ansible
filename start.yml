@@ -1,7 +1,9 @@
 ---
 - hosts: all
+  gather_facts: false
   remote_user: root
   become: true
   roles:
   #  - { role: sambaS3 }
-   - { role: wireguard }
+  #  - { role: wireguard }
+    - { role: pub_keys }

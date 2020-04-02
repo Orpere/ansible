@@ -1,4 +1,9 @@
 ---
 # vars file for wireguard
-interfaceaddress: '10.0.1.3/24'
-allowedips_server: '0.0.0.0/0'
+interfaceaddress: '10.100.100.1/24'
+internaladdress: '10.0.1.2/32'
+clientaddress: '10.100.100.2/22, 10.0.1.2/32'
+vpnclientadd: '10.100.100.2/32'
+listenport: '5018'
+dns: '1.1.1.1'
+publicip: '' # add here the public ip

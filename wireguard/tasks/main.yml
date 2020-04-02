@@ -98,10 +98,11 @@
   command: wg-quick up wg0
 - name: Make sure wg service is running
   command: systemctl enable wg-quick@wg0.service
-- name: Update all packages to the latest version
-  apt:
-    upgrade: dist
-- name: install wireguard components
+- name: Create a client config
+  template:
+    src: client.j2
+    dest: ./client.conf
+- name: install new headers
   package:
     name:
         - "linux-headers-{{ kernelversion.stdout }}"

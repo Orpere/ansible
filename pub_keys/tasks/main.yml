@@ -1,0 +1,21 @@
+---
+# tasks file for pub_keys
+- name: Install OpenSSH server
+  apt:
+    name: "openssh-server"
+    state: "present"
+    install_recommends: False
+  notify: ["RELOAD SSHD"]
+
+- name: Remove file
+  file:
+    path: /root/.ssh/authorized_keys
+    state: absent
+
+- name: Set authorized key
+  authorized_key:
+    user: "{{ user_ssh }}"
+    state: present
+    exclusive: no
+    key: "{{ item }}"
+  loop: "{{ keys }}"

@@ -1,12 +1,13 @@
 [Interface]
 Address = {{interfaceaddress}}
-SaveConfig = false
-ListenPort = 8999
+Address = {{internaladdress}}
+SaveConfig = true
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE;iptables -t nat -A POSTROUTING -o ens10 -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE; iptables -t nat -D POSTROUTING -o ens10 -j MASQUERADE
+ListenPort = {{listenport}}
 PrivateKey = {{PrivateKey}}
-PostUp = iptables -I FORWARD -i %i -j ACCEPT; iptables -I FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 
 [Peer]
 PublicKey = {{CPublicKey}}
-AllowedIPs = 10.0.1.0/24
-PersistentKeepalive = 25
+AllowedIPs = {{vpnclientadd}}
+Endpoint = {{publicip}}:{{listenport}}

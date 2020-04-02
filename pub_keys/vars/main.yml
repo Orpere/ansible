@@ -1,0 +1,8 @@
+---
+# vars file for pub_keys
+
+# add the user here
+user_ssh: root
+
+keys:
+    - "https://gitlab.com/orlando43.keys"

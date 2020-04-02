@@ -12,8 +12,13 @@ Role Variables
 --------------
 
 ```yaml
-interfaceaddress: '10.100.100.1/24' # range filtered by the vpn
-allowedips_server: '10.100.100.2/32' # IP authorized to access
+interfaceaddress: '10.100.100.1/24'
+internaladdress: '10.0.1.2/32'
+clientaddress: '10.100.100.2/22, 10.0.1.2/32'
+vpnclientadd: '10.100.100.2/32'
+listenport: '5018'
+dns: '1.1.1.1'
+publicip: '116.202.109.53'
 ```
 
 Dependencies
