@@ -35,7 +35,7 @@ passed in as parameters) is always nice for users too:
 ```yaml
     - hosts: servers
       roles:
-         - { role: base, x: 42 }
+         - { role: pub_keys, x: 42 }
 ```
 
 License
